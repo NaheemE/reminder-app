@@ -72,3 +72,7 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+.eslintrc.js
+android/build.gradle
+android/gradle/wrapper/gradle-wrapper.properties
