@@ -6,6 +6,7 @@ import Login from './Screens/Login'
 import Register from './Screens/Register'
 import Home from './Screens/Home'
 import { PaperProvider } from 'react-native-paper'
+import Add from './Screens/Add'
 
 const Stack = createNativeStackNavigator()
 
@@ -21,7 +22,22 @@ const App = () => {
           options={{ headerShown: false }}
 
           />
-          <Stack.Screen name='Home' component={Home} />
+          <Stack.Screen name='Home' component={Home}
+          options={{ headerShown: false }}
+          />
+          <Stack.Screen name='Add' component={Add}
+          options={{
+            title:"Set reminder",
+            headerTitleAlign:"center",
+        headerStyle:{
+          backgroundColor:"#512CAF"
+        },
+        headerTintColor: 'white',
+          headerTitleStyle: {
+            color: 'white',
+          }
+          }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

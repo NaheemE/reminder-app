@@ -14,7 +14,7 @@ const handleLogin=()=>{
     Alert.alert("Please fill the form completely...")
   }
   else{
-
+    navigation.navigate('Home')
   }
 }
   return (
