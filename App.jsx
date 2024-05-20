@@ -6,25 +6,29 @@ import Login from './Screens/Login'
 import Register from './Screens/Register'
 import Home from './Screens/Home'
 import { PaperProvider } from 'react-native-paper'
+import { Provider } from 'react-redux'
+import { store } from './Redux/store'
 
 const Stack = createNativeStackNavigator()
 
 const App = () => {
   return (
-    <PaperProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name='Login' component={Login}
-          options={{ headerShown: false }}
-          />
-          <Stack.Screen name='Register' component={Register}
-          options={{ headerShown: false }}
+    // <Provider store={store}>
+      <PaperProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name='Login' component={Login}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name='Register' component={Register}
+              options={{ headerShown: false }}
 
-          />
-          <Stack.Screen name='Home' component={Home} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+            />
+            <Stack.Screen name='Home' component={Home} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    // </Provider>
   )
 }
 
