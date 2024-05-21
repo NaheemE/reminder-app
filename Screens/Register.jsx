@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Alert } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Alert, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomInput from '../src/components/CustomInput'
 import auth from '@react-native-firebase/auth'
@@ -9,12 +9,15 @@ const Register = ({ navigation }) => {
   const [user, setUser] = useState({
     username: "", email: "", password: ""
   })
+  const [loading, setLoading] = useState(false);
+
   const handleRegister = async () => {
     const { username, email, password } = user
     if (!email || !password || !username) {
       Alert.alert("Please fill the form completely...")
     }
     else {
+      setLoading(true);
       try {
         const userCredentials = await auth().createUserWithEmailAndPassword(email, password)
         const user = userCredentials.user
@@ -31,20 +34,19 @@ const Register = ({ navigation }) => {
       }
       catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     }
   }
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const users = await firestore().collection('users').get()
-  //     console.log(users.docs);
-  //   }
-  //   getData()
-  // }, [])
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      {loading && (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#1A0B42" />
+        </View>
+      )}
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={{ justifyContent: "center", alignItems: "center", padding: 20, backgroundColor: "white", marginTop: 30 }}>
           <Image
@@ -93,5 +95,11 @@ const Register = ({ navigation }) => {
 export default Register
 
 const styles = StyleSheet.create({
-
+  loaderContainer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 2
+  },
 })
