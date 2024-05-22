@@ -6,14 +6,13 @@ import {
   View,
 } from 'react-native';
 import React, { useContext } from 'react';
-import {Modal, Portal, Button, PaperProvider} from 'react-native-paper';
+import { Modal, Portal, Button, PaperProvider } from 'react-native-paper';
 import FAIcons from 'react-native-vector-icons/FontAwesome6';
 import { reminderContext } from '../../context/COntextSHare';
 
-export default function ReminderItem({item,navigation}) {
-  const {reminder,setReminder}=useContext(reminderContext)
+export default function ReminderItem({ item, navigation }) {
+  const { reminder, setReminder } = useContext(reminderContext)
   const [visible, setVisible] = React.useState(false);
-
 
   const showModal = () => {
     setReminder(item)
@@ -28,12 +27,29 @@ export default function ReminderItem({item,navigation}) {
     minHeight: 150,
     justifyContent: 'space-between',
   };
-  let [date, time] = item.dateandtime.split(',').map(part => part.trim());
-  let [timePart, period] = time.split(' ');
-  let [hours, minutes] = timePart.split(':');
-  let formattedTime = `${hours}:${minutes} ${period}`;
+  let [date, time] = item?.dateandtime?.split(',').map(part => part.trim());
+  let [timePart, period] = time?.split(' ');
+  let [hours, minutes] = timePart?.split(':');
+  let formattedTime = `${hours}:${minutes}`;
 
-  const deleteReminder = () => {};
+  const formatDate = (dateString) => {
+    const [day, month, year] = dateString.split('/');
+
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    const monthName = monthNames[parseInt(month, 10) - 1];
+
+    return `${monthName} ${parseInt(day, 10)}`;
+  };
+
+  const formattedDate = formatDate(date);
+
+  // console.log(formattedDate);
+
+  const deleteReminder = () => { };
 
   return (
     <>
@@ -45,10 +61,10 @@ export default function ReminderItem({item,navigation}) {
           contentContainerStyle={containerStyle}>
           <View>
             <View>
-              <Text style={{color: '#220A5E', fontSize: 22, fontWeight: '500'}}>
+              <Text style={{ color: '#220A5E', fontSize: 22, fontWeight: '500' }}>
                 {item.title}
               </Text>
-              <Text style={{marginTop: 10, fontSize: 16}}>
+              <Text style={{ marginTop: 10, fontSize: 16 }}>
                 {item.description}
               </Text>
             </View>
@@ -68,13 +84,13 @@ export default function ReminderItem({item,navigation}) {
                   alignItems: 'center',
                   borderRadius: 10,
                 }}
-                onPress={()=>{
+                onPress={() => {
                   navigation.navigate("Edit")
                   hideModal()
                 }}
-                
-                >
-                <FAIcons style={{color: 'white', fontSize: 20}} name="edit" />
+
+              >
+                <FAIcons style={{ color: 'white', fontSize: 20 }} name="edit" />
               </TouchableOpacity>
               <TouchableOpacity
                 style={{
@@ -86,12 +102,12 @@ export default function ReminderItem({item,navigation}) {
                   borderRadius: 10,
                 }}
                 onPress={deleteReminder}
-                >
-                <FAIcons style={{color: 'white', fontSize: 20}} name="trash" />
+              >
+                <FAIcons style={{ color: 'white', fontSize: 20 }} name="trash" />
               </TouchableOpacity>
             </View>
-            <View style={{marginTop: 10}}>
-              <Text style={{color: 'black'}}>{formattedTime}</Text>
+            <View style={{ marginTop: 10 }}>
+              <Text style={{ color: 'black' }}>{formattedTime}</Text>
             </View>
           </View>
         </Modal>
@@ -110,7 +126,7 @@ export default function ReminderItem({item,navigation}) {
             marginTop: 20,
             elevation: 5,
           }}>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <View
               style={{
                 width: 10,
@@ -119,21 +135,24 @@ export default function ReminderItem({item,navigation}) {
                   item.priority == 'low'
                     ? '#2196F3'
                     : item.priority == 'medium'
-                    ? 'orange'
-                    : 'red',
+                      ? 'orange'
+                      : 'red',
                 height: 10,
                 marginTop: 5,
               }}></View>
-            <View style={{marginLeft: 10}}>
-              <Text style={{color: 'white', fontSize: 18, fontWeight: '500'}}>
+            <View style={{ marginLeft: 10 }}>
+              <Text style={{ color: 'white', fontSize: 18, fontWeight: '500' }}>
                 {item.title}
               </Text>
-              <Text style={{color: 'black'}}>{item.description}</Text>
+              <Text style={{ color: 'black' }}>{item.description}</Text>
             </View>
           </View>
           <View>
-            <Text style={{color: 'white', fontSize: 18, fontWeight: '500'}}>
-              {formattedTime.toUpperCase()}
+            <Text style={{ color: 'white', fontSize: 18, fontWeight: '500' }}>
+              {formattedTime}
+            </Text>
+            <Text style={{ color: 'white', fontSize: 18, fontWeight: '500' }}>
+              {formattedDate}
             </Text>
           </View>
         </View>
