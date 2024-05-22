@@ -15,11 +15,12 @@ export default function CustomInput({label,value,onChangeText}) {
     <View>
         <TextInput
         mode='outlined'
-        style={{backgroundColor:"white",width:"100%",height:60,marginTop:20,borderColor:"red"}}
+        style={{backgroundColor:"white",width:"100%",minHeight:60,marginTop:20,borderColor:"red",textAlignVertical:"center"}}
         label={label}
         value={value}
         onChangeText={onChangeText}
         theme={customTheme}
+        multiline={true}
         />
     </View>
   )

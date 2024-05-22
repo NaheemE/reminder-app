@@ -1,9 +1,21 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Calendar } from 'react-native-calendars'
+import { dateContext } from '../../context/COntextSHare'
 
 export default function Calender() {
-    const [selected, setSelected] = useState('');
+  const {selected,setSelected}=useContext(dateContext)
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  useEffect(() => {
+    setSelected(getTodayDate());
+  }, []);
 
   return (
     <View style={{paddingHorizontal:20}}>
