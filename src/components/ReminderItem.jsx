@@ -1,4 +1,5 @@
 import {
+  Alert,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -9,14 +10,21 @@ import React, { useContext } from 'react';
 import { Modal, Portal, Button, PaperProvider } from 'react-native-paper';
 import FAIcons from 'react-native-vector-icons/FontAwesome6';
 import { reminderContext } from '../../context/COntextSHare';
+import firestore from '@react-native-firebase/firestore'
+
 
 export default function ReminderItem({ item, navigation }) {
   const { reminder, setReminder } = useContext(reminderContext)
   const [visible, setVisible] = React.useState(false);
 
+  const docId = item._ref._documentPath._parts[1]
+
   const showModal = () => {
-    setReminder(item)
+    setReminder(item?._data)
     setVisible(true);
+    console.log('riririririri');
+    console.log(docId);
+    console.log(reminder);
   }
   const hideModal = () => setVisible(false);
   const containerStyle = {
@@ -27,7 +35,7 @@ export default function ReminderItem({ item, navigation }) {
     minHeight: 150,
     justifyContent: 'space-between',
   };
-  let [date, time] = item?.dateandtime?.split(',').map(part => part.trim());
+  let [date, time] = item?._data?.dateandtime?.split(',').map(part => part.trim());
   let [timePart, period] = time?.split(' ');
   let [hours, minutes] = timePart?.split(':');
   let formattedTime = `${hours}:${minutes}`;
@@ -47,9 +55,27 @@ export default function ReminderItem({ item, navigation }) {
 
   const formattedDate = formatDate(date);
 
-  // console.log(formattedDate);
+  const deleteReminder = () => {
 
-  const deleteReminder = () => { };
+    Alert.alert('Delete reminder ?', '', [
+      {
+        text: 'No',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK', onPress: async () => {
+          try {
+            await firestore().collection('reminders').doc(docId).delete()
+            console.log('deleted successfully');
+            setVisible(false)
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      },
+    ]);
+  };
 
   return (
     <>
@@ -62,10 +88,10 @@ export default function ReminderItem({ item, navigation }) {
           <View>
             <View>
               <Text style={{ color: '#220A5E', fontSize: 22, fontWeight: '500' }}>
-                {item.title}
+                {item?._data?.title}
               </Text>
               <Text style={{ marginTop: 10, fontSize: 16 }}>
-                {item.description}
+                {item?._data?.description}
               </Text>
             </View>
 
@@ -85,7 +111,7 @@ export default function ReminderItem({ item, navigation }) {
                   borderRadius: 10,
                 }}
                 onPress={() => {
-                  navigation.navigate("Edit")
+                  navigation.navigate("Edit", { id: item?._ref?._documentPath?._parts[1] })
                   hideModal()
                 }}
 
@@ -132,9 +158,9 @@ export default function ReminderItem({ item, navigation }) {
                 width: 10,
                 borderRadius: 10,
                 backgroundColor:
-                  item.priority == 'low'
+                  item?._data?.priority == 'low'
                     ? '#2196F3'
-                    : item.priority == 'medium'
+                    : item?._data?.priority == 'medium'
                       ? 'orange'
                       : 'red',
                 height: 10,
@@ -142,9 +168,9 @@ export default function ReminderItem({ item, navigation }) {
               }}></View>
             <View style={{ marginLeft: 10 }}>
               <Text style={{ color: 'white', fontSize: 18, fontWeight: '500' }}>
-                {item.title}
+                {item?._data?.title}
               </Text>
-              <Text style={{ color: 'black' }}>{item.description}</Text>
+              <Text style={{ color: 'black' }}>{item?._data?.description}</Text>
             </View>
           </View>
           <View>

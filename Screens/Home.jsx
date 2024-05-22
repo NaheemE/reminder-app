@@ -49,18 +49,26 @@ const Home = ({ navigation, route }) => {
           .collection('reminders')
           .where('uid', '==', currentUser.uid)
           .get();
-        console.log(remindersQuerySnapshot.docs);
+
+        // console.log('aaaaaaaaaaaa');
+        // const id = remindersQuerySnapshot._docs[0]._ref._documentPath._parts[1]
+        // console.log(id);
+
         setReminders(
           remindersQuerySnapshot.docs.filter(item => {
+            // const id = item._ref._documentPath._parts[1];
             const [year, month, day] = selected.split('-');
             const datePart = item._data.dateandtime.split(',')[0].trim();
-            return datePart === `${parseInt(day)}/${parseInt(month)}/${year}`;
-          }),
+            const formattedDate = `${String(parseInt(day)).padStart(2, '0')}/${String(parseInt(month)).padStart(2, '0')}/${year}`;
+            return datePart === formattedDate 
+          })
         );
       };
       getData();
     }, [selected]),
   );
+console.log('bbbbbb');
+console.log(reminders);
 
   return (
     <ScrollView
@@ -82,8 +90,8 @@ const Home = ({ navigation, route }) => {
               logout();
             }
           }}
-          dropdownStyle={{ width: 100,height:42,alignItems:"center",padding:0 }}
-          dropdownTextStyle={{ fontSize: 15,width:100,textAlign:"center",fontWeight:"500",color:"black" }}
+          dropdownStyle={{ width: 100, height: 42, alignItems: "center", padding: 0 }}
+          dropdownTextStyle={{ fontSize: 15, width: 100, textAlign: "center", fontWeight: "500", color: "black" }}
         >
           <Text style={{ color: 'black', fontSize: 23, fontWeight: '600' }}>
             Hey {username}...

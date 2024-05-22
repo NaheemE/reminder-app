@@ -1,10 +1,10 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import ReminderItem from './ReminderItem';
-import {dateContext} from '../../context/COntextSHare';
+import { dateContext } from '../../context/COntextSHare';
 
-export default function Reminders({reminders, navigation}) {
-  const {selected, setSelected} = useContext(dateContext);
+export default function Reminders({ reminders, navigation }) {
+  const { selected, setSelected } = useContext(dateContext);
   const [dateString, setDatestring] = useState('');
 
   const getTodayDate = () => {
@@ -48,12 +48,14 @@ export default function Reminders({reminders, navigation}) {
       setDatestring(selected);
     }
   }, [selected]);
+
+
   return (
-    <View style={{marginVertical: 20, padding: 20}}>
-      <Text style={{color: 'black', fontSize: 23, fontWeight: '500'}}>
+    <View style={{ marginVertical: 20, padding: 20 }}>
+      <Text style={{ color: 'black', fontSize: 23, fontWeight: '500' }}>
         {dateString}
       </Text>
-      <View style={{alignItems: 'center', width: '100%', marginTop: 20}}>
+      <View style={{ alignItems: 'center', width: '100%', marginTop: 20 }}>
         <View
           style={{
             width: 100,
@@ -63,14 +65,15 @@ export default function Reminders({reminders, navigation}) {
           }}></View>
       </View>
       <FlatList
-      showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
         data={reminders}
-        renderItem={({item}) => (
-          <ReminderItem navigation={navigation} item={item._data} />
+        renderItem={({ item }) => (
+          <ReminderItem navigation={navigation} item={item} />
         )}
         ListEmptyComponent={
-          <View style={{flexDirection:"row",marginTop:20}}>
-            <Text style={{color:"black",fontSize:15}}>No reminders set , </Text><TouchableOpacity onPress={()=>navigation.navigate("Add")}><Text style={{color:"#512CAF",fontSize:15}}>click here to add</Text></TouchableOpacity>
+          <View style={{ flexDirection: "row", marginTop: 20 }}>
+            <Text style={{ color: "black", fontSize: 15 }}>No reminders set , </Text><TouchableOpacity onPress={() => navigation.navigate("Add")}><Text style={{ color: "#512CAF", fontSize: 15 }}>click here to add</Text></TouchableOpacity>
           </View>
         }
       />
