@@ -8,6 +8,7 @@ import RNDateTimePicker from "@react-native-community/datetimepicker";
 export default function SetDateandTime({reminder,setReminder}) {
   const [visible1, setVisible1] =useState(false);
   const [visible2, setVisible2] =useState(false);
+  const [date,setDate]=useState(new Date())
 
 
   const showModal1 = () => setVisible1(true);
@@ -18,7 +19,8 @@ export default function SetDateandTime({reminder,setReminder}) {
 
   const onChange = (event, selectedDate) => {
     if (selectedDate) {
-      setReminder({...reminder,dateandtime:selectedDate});
+      setDate(selectedDate)
+      setReminder({...reminder,dateandtime:selectedDate.toLocaleString()});
       hideModal1();
       hideModal2();
     }
@@ -29,14 +31,14 @@ export default function SetDateandTime({reminder,setReminder}) {
       <Portal>
         <Modal visible={visible1} onDismiss={hideModal1} contentContainerStyle={containerStyle}>
         <RNDateTimePicker
-        value={reminder.dateandtime}
+        value={date}
         mode={"date"}
         is24Hour={true}
         onChange={onChange}
       /></Modal>
       <Modal visible={visible2} onDismiss={hideModal2} contentContainerStyle={containerStyle}>
         <RNDateTimePicker
-        value={reminder.dateandtime}
+        value={date}
         mode={"time"}
         onChange={onChange}
       /></Modal>

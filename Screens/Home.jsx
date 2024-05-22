@@ -12,6 +12,7 @@ import { useFocusEffect } from '@react-navigation/native';
 const Home = ({ navigation, route }) => {
 
   const [username, setUsername] = useState('')
+  const [reminders,setReminders]=useState([])
 
   const logout = async () => {
     try {
@@ -32,7 +33,8 @@ const Home = ({ navigation, route }) => {
       setUsername(users?.data().username)
 
       const remindersQuerySnapshot = await firestore().collection('reminders').where('uid', '==', currentUser.uid).get();
-      console.log(remindersQuerySnapshot.docs);
+      // console.log(remindersQuerySnapshot.docs);
+      setReminders(remindersQuerySnapshot.docs)
     }
     getData()
   }, []));
@@ -70,7 +72,7 @@ const Home = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
       <Calender />
-      <Reminders />
+      <Reminders navigation={navigation} reminders={reminders} />
     </ScrollView>
   );
 };

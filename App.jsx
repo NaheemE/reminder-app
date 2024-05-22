@@ -8,6 +8,8 @@ import Home from './Screens/Home'
 import { PaperProvider } from 'react-native-paper'
 import Add from './Screens/Add'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Edit from './Screens/Edit'
+import COntextSHare from './context/COntextSHare'
 
 const Stack = createNativeStackNavigator()
 
@@ -47,21 +49,44 @@ const App = () => {
   return (
     // <Provider store={store}>
     <PaperProvider>
-      <NavigationContainer>
-        <Stack.Navigator >
-          {
-            firstTimeUser === 'false' ?
-              <>
-                <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} initialParams={{ handleAsyncStorageChange }}/>
-                <Stack.Screen name='Add' component={Add} options={{ headerShown: false }} />
-              </> :
-              <>
-                <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} initialParams={{ handleAsyncStorageChange }}/>
-                <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
-              </>
-          }
-        </Stack.Navigator>
-      </NavigationContainer>
+<COntextSHare>
+        <NavigationContainer>
+          <Stack.Navigator >
+            {
+              firstTimeUser === 'false' ?
+                <>
+                  <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} initialParams={{ handleAsyncStorageChange }}/>
+                  <Stack.Screen name='Add' component={Add} options={{
+                    title:"Set reminder",
+                     headerTitleAlign:"center",
+                     headerStyle:{
+                       backgroundColor:"#512CAF"
+                     },
+                     headerTintColor: 'white',
+                       headerTitleStyle: {
+                         color: 'white',
+                       }
+                  }} />
+                  <Stack.Screen name='Edit' component={Edit} options={{
+                    title:"Edit reminder",
+                     headerTitleAlign:"center",
+                     headerStyle:{
+                       backgroundColor:"#512CAF"
+                     },
+                     headerTintColor: 'white',
+                       headerTitleStyle: {
+                         color: 'white',
+                       }
+                  }} />
+                </> :
+                <>
+                  <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} initialParams={{ handleAsyncStorageChange }}/>
+                  <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
+                </>
+            }
+          </Stack.Navigator>
+        </NavigationContainer> 
+</COntextSHare>
     </PaperProvider>
   )
 }

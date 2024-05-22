@@ -20,7 +20,7 @@ export default function Add({ navigation }) {
     title: '',
     description: '',
     priority: 'low',
-    dateandtime: new Date(),
+    dateandtime: '',
     uid: ''
   });
 
@@ -32,6 +32,7 @@ export default function Add({ navigation }) {
     }
     else {
       try {
+        setReminder({...reminder,dateandtime:dateandtime})
         const res = await firestore().collection("reminders").add(reminder)
         console.log(res);
         navigation.navigate("Home")
