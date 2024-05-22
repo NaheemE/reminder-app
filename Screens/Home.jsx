@@ -1,18 +1,27 @@
-import { Button, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import {
+  Button,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import Calender from '../src/components/Calender';
 import FAIcons from 'react-native-vector-icons/FontAwesome6';
 import Reminders from '../src/components/Reminders';
 import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth'
+import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-
+import { dateContext } from '../context/COntextSHare';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 const Home = ({ navigation, route }) => {
-
-  const [username, setUsername] = useState('')
-  const [reminders,setReminders]=useState([])
+  const { selected, setSelected } = useContext(dateContext);
+  console.log(selected);
+  const [username, setUsername] = useState('');
+  const [reminders, setReminders] = useState([]);
 
   const logout = async () => {
     try {
@@ -24,34 +33,62 @@ const Home = ({ navigation, route }) => {
     } catch (error) {
       console.log('Error', error.message);
     }
-  }
+  };
 
-  useFocusEffect(React.useCallback(() => {
-    const getData = async () => {
-      const currentUser = auth().currentUser;
-      const users = await firestore().collection('users').doc(currentUser.uid).get()
-      setUsername(users?.data().username)
+  useFocusEffect(
+    React.useCallback(() => {
+      const getData = async () => {
+        const currentUser = auth().currentUser;
+        const users = await firestore()
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
+        setUsername(users?.data().username);
 
-      const remindersQuerySnapshot = await firestore().collection('reminders').where('uid', '==', currentUser.uid).get();
-      // console.log(remindersQuerySnapshot.docs);
-      setReminders(remindersQuerySnapshot.docs)
-    }
-    getData()
-  }, []));
+        const remindersQuerySnapshot = await firestore()
+          .collection('reminders')
+          .where('uid', '==', currentUser.uid)
+          .get();
+        console.log(remindersQuerySnapshot.docs);
+        setReminders(
+          remindersQuerySnapshot.docs.filter(item => {
+            const [year, month, day] = selected.split('-');
+            const datePart = item._data.dateandtime.split(',')[0].trim();
+            return datePart === `${parseInt(day)}/${parseInt(month)}/${year}`;
+          }),
+        );
+      };
+      getData();
+    }, [selected]),
+  );
 
   return (
-    <ScrollView style={{ paddingTop: 20, backgroundColor: "white" }} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={{ paddingTop: 20, backgroundColor: 'white' }}
+      showsVerticalScrollIndicator={false}
+    >
       <View
         style={{
           justifyContent: 'space-between',
           flexDirection: 'row',
           alignItems: 'center',
-          paddingHorizontal: 20
-        }}>
-        <Button title='logout' onPress={logout} />
-        <Text style={{ color: 'black', fontSize: 23, fontWeight: '600' }}>
-          Hey {username}...
-        </Text>
+          paddingHorizontal: 20,
+        }}
+      >
+        <ModalDropdown
+          options={['Logout']}
+          onSelect={(index, value) => {
+            if (value === 'Logout') {
+              logout();
+            }
+          }}
+          dropdownStyle={{ width: 100,height:42,alignItems:"center",padding:0 }}
+          dropdownTextStyle={{ fontSize: 15,width:100,textAlign:"center",fontWeight:"500",color:"black" }}
+        >
+          <Text style={{ color: 'black', fontSize: 23, fontWeight: '600' }}>
+            Hey {username}...
+          </Text>
+        </ModalDropdown>
         <TouchableOpacity
           style={{
             backgroundColor: '#512CAF',
@@ -60,10 +97,9 @@ const Home = ({ navigation, route }) => {
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 10,
-            elevation: 5
+            elevation: 5,
           }}
-          onPress={() => navigation.navigate("Add")}
-
+          onPress={() => navigation.navigate('Add')}
         >
           <FAIcons
             style={{ color: 'white', fontSize: 25, fontWeight: '900' }}
