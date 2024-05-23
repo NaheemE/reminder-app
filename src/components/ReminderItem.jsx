@@ -9,11 +9,12 @@ import {
 import React, { useContext } from 'react';
 import { Modal, Portal, Button, PaperProvider } from 'react-native-paper';
 import FAIcons from 'react-native-vector-icons/FontAwesome6';
-import { reminderContext } from '../../context/COntextSHare';
+import { deleteResponseContext, reminderContext } from '../../context/COntextSHare';
 import firestore from '@react-native-firebase/firestore'
 
 
 export default function ReminderItem({ item, navigation }) {
+  const {deleted,setDeleted}=useContext(deleteResponseContext)
   const { reminder, setReminder } = useContext(reminderContext)
   const [visible, setVisible] = React.useState(false);
 
@@ -54,7 +55,6 @@ export default function ReminderItem({ item, navigation }) {
   };
 
   const formattedDate = formatDate(date);
-
   const deleteReminder = () => {
 
     Alert.alert('Delete reminder ?', '', [
@@ -68,6 +68,7 @@ export default function ReminderItem({ item, navigation }) {
           try {
             await firestore().collection('reminders').doc(docId).delete()
             console.log('deleted successfully');
+            setDeleted(new Date())
             setVisible(false)
           } catch (error) {
             console.error(error);
@@ -170,7 +171,8 @@ export default function ReminderItem({ item, navigation }) {
               <Text style={{ color: 'white', fontSize: 18, fontWeight: '500' }}>
                 {item?._data?.title}
               </Text>
-              <Text style={{ color: 'black' }}>{item?._data?.description}</Text>
+              <Text style={{ color: 'black' }}>{item?._data?.description ? item._data.description.slice(0, 25) : ''}
+</Text>
             </View>
           </View>
           <View>

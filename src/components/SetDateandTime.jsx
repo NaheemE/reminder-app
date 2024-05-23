@@ -20,7 +20,15 @@ export default function SetDateandTime({reminder,setReminder}) {
   const onChange = (event, selectedDate) => {
     if (selectedDate) {
       setDate(selectedDate)
-      setReminder({...reminder,dateandtime:selectedDate.toLocaleString()});
+      const year = selectedDate.getFullYear();
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+      const day = String(selectedDate.getDate()).padStart(2, '0');
+      const hours = String(selectedDate.getHours() % 12 || 12).padStart(2, '0');
+      const minutes = String(selectedDate.getMinutes()).padStart(2, '0');
+      const seconds = String(selectedDate.getSeconds()).padStart(2, '0');
+      const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+      const readableDateString = `${day}/${month}/${year}, ${hours}:${minutes}:${seconds} ${ampm}`;       
+      setReminder({...reminder,dateandtime:readableDateString});
       hideModal1();
       hideModal2();
     }

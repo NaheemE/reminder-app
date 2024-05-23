@@ -14,15 +14,14 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-import { dateContext } from '../context/COntextSHare';
+import { dateContext, deleteResponseContext } from '../context/COntextSHare';
 import ModalDropdown from 'react-native-modal-dropdown';
 
 const Home = ({ navigation, route }) => {
   const { selected, setSelected } = useContext(dateContext);
-  console.log(selected);
+  const {deleted,setDeleted}=useContext(deleteResponseContext)
   const [username, setUsername] = useState('');
   const [reminders, setReminders] = useState([]);
-
   const logout = async () => {
     try {
       await auth().signOut();
@@ -44,31 +43,28 @@ const Home = ({ navigation, route }) => {
           .doc(currentUser.uid)
           .get();
         setUsername(users?.data().username);
-
         const remindersQuerySnapshot = await firestore()
           .collection('reminders')
           .where('uid', '==', currentUser.uid)
           .get();
-
+           console.log(remindersQuerySnapshot.docs);
         // console.log('aaaaaaaaaaaa');
         // const id = remindersQuerySnapshot._docs[0]._ref._documentPath._parts[1]
         // console.log(id);
-
         setReminders(
-          remindersQuerySnapshot.docs.filter(item => {
+            remindersQuerySnapshot.docs.filter(item => {
             // const id = item._ref._documentPath._parts[1];
             const [year, month, day] = selected.split('-');
             const datePart = item._data.dateandtime.split(',')[0].trim();
+            console.log(datePart);
             const formattedDate = `${String(parseInt(day)).padStart(2, '0')}/${String(parseInt(month)).padStart(2, '0')}/${year}`;
             return datePart === formattedDate 
           })
         );
       };
       getData();
-    }, [selected]),
+    }, [selected,deleted]),
   );
-console.log('bbbbbb');
-console.log(reminders);
 
   return (
     <ScrollView

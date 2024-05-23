@@ -3,17 +3,21 @@ import React, { createContext, useState } from 'react'
 
 export const reminderContext=createContext()
 export const dateContext=createContext()
+export const deleteResponseContext=createContext()
 
 
 export default function COntextSHare({children}) {
     const [reminder,setReminder]=useState({})
     const [selected, setSelected] = useState('');
+    const [deleted,setDeleted]=useState()
 
   return (
    <dateContext.Provider value={{selected,setSelected}}>
-        <reminderContext.Provider value={{reminder,setReminder}}>
-            {children}
-        </reminderContext.Provider>
+        <deleteResponseContext.Provider value={{deleted,setDeleted}}>
+          <reminderContext.Provider value={{reminder,setReminder}}>
+              {children}
+          </reminderContext.Provider>
+        </deleteResponseContext.Provider>
    </dateContext.Provider>
   )
 }
