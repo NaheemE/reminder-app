@@ -39,7 +39,7 @@ export default function ReminderItem({ item, navigation }) {
   let [date, time] = item?._data?.dateandtime?.split(',').map(part => part.trim());
   let [timePart, period] = time?.split(' ');
   let [hours, minutes] = timePart?.split(':');
-  let formattedTime = `${hours}:${minutes}`;
+  let formattedTime = `${hours}:${minutes} ${period}`;
 
   const formatDate = (dateString) => {
     const [day, month, year] = dateString.split('/');

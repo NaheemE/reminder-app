@@ -20,16 +20,17 @@ const Login = ({ navigation, route }) => {
       try {
         await auth().signInWithEmailAndPassword(email, password);
         console.log('Sign In Successful');
+        Alert.alert("Login successfull..")
         await AsyncStorage.setItem('firstTimeUser', 'false');
         route.params.handleAsyncStorageChange();
         // navigation.navigate("Home")
         setUser({ email: "", password: "" })
       } catch (error) {
         console.log('Error', error.message);
+        Alert.alert("Account not found..")
       } finally {
         setLoading(false);
       }
-
     }
   }
   return (
@@ -62,6 +63,7 @@ const Login = ({ navigation, route }) => {
               label={"Password"}
               value={user.password}
               onChangeText={text => setUser({ ...user, password: text })}
+              secureTextEntry={true}
             />
             <TouchableOpacity style={{ width: "100%", backgroundColor: "#1A0B42", height: 60, borderRadius: 15, justifyContent: "center", alignItems: "center", marginTop: 20 }}
               onPress={handleLogin}

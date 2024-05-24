@@ -57,6 +57,7 @@ export default function Edit({ navigation, route }) {
           label={'Description'}
           value={reminder.description}
           onChangeText={text => setReminder({ ...reminder, description: text })}
+          multilined={true}
         />
       </View>
       <View style={{ marginTop: 20 }}>

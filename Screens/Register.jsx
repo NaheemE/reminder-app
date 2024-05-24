@@ -26,7 +26,7 @@ const Register = ({ navigation }) => {
           username: username,
           email: email
         })
-        console.log(user);
+        Alert.alert("Registration successful..")
         navigation.navigate("Login")
         setUser({
           username: "", email: "", password: ""
@@ -75,7 +75,8 @@ const Register = ({ navigation }) => {
               label={"Password"}
               value={user.password}
               onChangeText={text => setUser({ ...user, password: text })}
-            />
+              secureTextEntry={true}
+              />
 
             <TouchableOpacity style={{ width: "100%", backgroundColor: "#1A0B42", height: 60, borderRadius: 15, justifyContent: "center", alignItems: "center", marginTop: 20 }}
               onPress={handleRegister}

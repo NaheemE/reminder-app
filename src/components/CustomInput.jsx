@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { TextInput,DefaultTheme } from 'react-native-paper'
 
-export default function CustomInput({label,value,onChangeText}) {
+export default function CustomInput({label,value,onChangeText,secureTextEntry=false,multilined=false}) {
   const customTheme = {
     ...DefaultTheme,
     colors: {
@@ -20,7 +20,8 @@ export default function CustomInput({label,value,onChangeText}) {
         value={value}
         onChangeText={onChangeText}
         theme={customTheme}
-        multiline={true}
+        multiline={multilined}
+        secureTextEntry={secureTextEntry}
         />
     </View>
   )
