@@ -10,6 +10,7 @@ import Add from './Screens/Add'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Edit from './Screens/Edit'
 import COntextSHare from './context/COntextSHare'
+import {PermissionsAndroid} from 'react-native';
 
 const Stack = createNativeStackNavigator()
 
@@ -17,6 +18,8 @@ const App = () => {
 
   const [firstTimeUser, setFirstTimeUser] = useState('')
   const [loading, setLoading] = useState(true);
+
+  PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
   const fetchData = async () => {
     try {

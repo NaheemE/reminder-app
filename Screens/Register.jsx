@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import CustomInput from '../src/components/CustomInput'
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
+import messaging from '@react-native-firebase/messaging';
 
 
 const Register = ({ navigation }) => {
@@ -21,10 +22,12 @@ const Register = ({ navigation }) => {
       try {
         const userCredentials = await auth().createUserWithEmailAndPassword(email, password)
         const user = userCredentials.user
+        const fcmToken = await messaging().getToken();
 
         await firestore().collection('users').doc(user.uid).set({
           username: username,
-          email: email
+          email: email,
+          fcmToken: fcmToken
         })
         console.log(user);
         navigation.navigate("Login")
@@ -39,6 +42,16 @@ const Register = ({ navigation }) => {
       }
     }
   }
+
+  // useEffect(() => {
+  //   const getToken = async () => {
+
+  //     console.log(fcmToken);
+  //   }
+  //   getToken()
+  // })
+
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>

@@ -60,15 +60,60 @@ const Home = ({ navigation, route }) => {
             const [year, month, day] = selected.split('-');
             const datePart = item._data.dateandtime.split(',')[0].trim();
             const formattedDate = `${String(parseInt(day)).padStart(2, '0')}/${String(parseInt(month)).padStart(2, '0')}/${year}`;
-            return datePart === formattedDate 
+            return datePart === formattedDate
           })
         );
       };
       getData();
+
     }, [selected]),
   );
-console.log('bbbbbb');
-console.log(reminders);
+
+  const now = Date.now();
+  console.log('nowwwww');
+  console.log(now);
+  // const reminderTime = reminders[0]?._data?.dateandtime?.toDate().getTime();
+  // const reminderTime = new Date(reminders[0]?._data?.).getTime();
+
+  function parseDateTime(dateTimeStr) {
+    try {
+      const [datePart, timePart] = dateTimeStr?.split(',').map(part => part.trim());
+      if (!datePart || !timePart) {
+        throw new Error('Invalid date and time format');
+      }
+
+      const [day, month, year] = datePart.split('/');
+      const [hours, minutes, seconds] = timePart.split(':');
+
+      if (!day || !month || !year || !hours || !minutes || !seconds) {
+        throw new Error('Invalid date or time components');
+      }
+
+      // Create a Date object with the parsed values
+      const date = new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
+      if (isNaN(date.getTime())) {
+        throw new Error('Invalid date object');
+      }
+
+      return date;
+    } catch (error) {
+      console.error('Error parsing date and time:', error);
+      return null;
+    }
+  }
+
+  const reminderTime = reminders[0]?._data?.dateandtime
+
+  const someTime = parseDateTime(reminderTime)
+
+  console.log('bbbbbb');
+  console.log(someTime);
+
+  const anothertime = new Date(someTime).getTime();
+  console.log(anothertime);
+
+  // console.log(reminders);
+
 
   return (
     <ScrollView
